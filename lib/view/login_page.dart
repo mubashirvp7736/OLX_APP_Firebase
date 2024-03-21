@@ -1,266 +1,135 @@
-// import 'package:firebase2/widget/login.dart';
-// import 'package:firebase2/widget/textstyle_widget.dart';
-// import 'package:flutter/material.dart';
 
-// class LoginScreen extends StatelessWidget {
-
-//   final emailController=TextEditingController();
-//   final passwordController=TextEditingController();
-//    LoginScreen({super.key});
-//   @override
-//   Widget build(BuildContext context) {
-//     Size mediaquery=MediaQuery.of(context).size;
-//     return Scaffold(
-//       body: Column(
-//         children: [
-//           Container(
-//             height:mediaquery.height*0.3,
-//             width: mediaquery.width*1,
-//              decoration:const BoxDecoration(
-//               borderRadius: BorderRadius.only(
-//                 bottomLeft: Radius.circular(20),
-//                 bottomRight: Radius.circular(20),
-//               ),
-//             ),
-//            child: Image.asset('assets/login.jpg',fit: BoxFit.cover,),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(20),
-//             child: Column(
-//              mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 TextFormField(
-//                   //obscureText: true,
-//                   controller: emailController,
-//                    decoration:const InputDecoration(
-//                   //  border: OutlineInputBorder(),
-//                     labelText: "email"  
-//                    ),  
-//                 ),
-//               const  SizedBox(height: 20,),
-//                 TextFormField(
-//                   obscureText: true,
-//                   controller: passwordController,
-//                    decoration:const InputDecoration(
-//                     //border: OutlineInputBorder(),
-//                     labelText: "Password"  
-//                    ),  
-//                 ),const SizedBox(height: 20,),
-//                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     textPoppins(data: 'Sign in'),
-//                     GestureDetector(
-//                       onTap: (){
-                
-//                       },
-//                       child: CircleAvatar(
-//                         radius: 30,
-//                         backgroundColor:Color(0xFF2F3C7E),
-//                         child: textPoppins(data: "->",color: Colors.white),
-                        
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//                 Row(
-//                   children: [
-//                     Flexible(child: Divider( )),
-//                     Text('or login with'),
-//                      Flexible(child: Divider( )),
-//                   ],
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-// LoginWidgets().loginIcons(context)
-//                 ],)
-//               ],
-            
-//             ),
-//           ),
-
-//         ],
-//       ),
-//     );
-//   }
-// }
-import 'package:firebase2/widget/textstyle_widget.dart';
+import 'package:firebase2/controller/authentication_provider.dart';
+import 'package:firebase2/view/otp_screen.dart';
+import 'package:firebase2/view/phone_auth.dart';
+import 'package:firebase2/view/register_page.dart';
+import 'package:firebase2/widget/button.dart';
+import 'package:firebase2/widget/square_button.dart';
+import 'package:firebase2/widget/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-class LoginScreen extends StatefulWidget {
-  final  Function()? onTap;
- const LoginScreen({super.key,required this.onTap});
+import 'package:provider/provider.dart';
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-
-  final passwordController = TextEditingController();
-
-void signIn()async{
-
-  showDialog(context: context, builder: (context) =>const Center(
-    child: CircularProgressIndicator(),
-  ),);
-
-  try{
-   FirebaseAuth.instance.signInWithEmailAndPassword(
-    email: emailController.text, 
-    password: passwordController.text);
-    Navigator.pop(context);
-  }on FirebaseAuthException catch (e){
-    Navigator.pop(context);
-    if(e.code=="user-not-found"){
-      wrongEmailMessage(context);
-    }else if(e.code=="wrong password"){
-       wrongPasswordMessage(context);
-    }
-
-  }
-  }
-  void wrongEmailMessage(BuildContext  context){
-  
-    const snackbar= SnackBar(
-          content: Text('failed email')
-        ,duration: Duration(seconds: 3),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  }
-
-  void wrongPasswordMessage(BuildContext context){
-   
-    const snackBar= SnackBar(
-          content: Text('failed Password')
-        ,duration: Duration(seconds: 3),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+class LoginScreen extends StatelessWidget {
+  final Function()? onTap;
+  const LoginScreen({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    Size mediaquery = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: mediaquery.height * 0.3,
-                width: mediaquery.width * 1,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+    return Scaffold(
+      body: SafeArea(
+          child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: SingleChildScrollView(
+            child: Consumer<LoginProvider>(
+              builder: (context, value, child) => Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 40),
+                  const Text(
+                    'Welcome back to the login screen',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+                  const SizedBox(height: 20),
+                  MyTextField(
+                    controller: value.emailController,
+                    hintText: 'Enter the email',
+                    obscureText: false,
                   ),
-                  child: Image.asset(
-                    'assets/login.jpg',
-                    fit: BoxFit.cover,
+                  const SizedBox(height: 20),
+                  MyTextField(
+                      controller: value.passwordlController,
+                      hintText: 'Enter the password here',
+                      obscureText: true),
+                  const SizedBox(height: 20),
+                  MyButton(
+                    text: 'Sign In',
+                    onTap: () => value.signIn(context),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      //obscureText: true,
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        //  border: OutlineInputBorder(),
-                        labelText: "email",
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Don\'t have account? ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
-                    ),
-                    const SizedBox(height: 20,),
-                    TextFormField(
-                      obscureText: true,
-                      controller: passwordController,
-                      decoration: const InputDecoration(
-                        //border: OutlineInputBorder(),
-                        labelText: "Password",
+                      InkWell(
+                        onTap: () {
+                          onTap;
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const RegisterScreen()));
+                        },
+                        child: const Text(
+                          'Register now',
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 40),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          color: Colors.grey,
+                          height: 1,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                       textPoppins(data: "Sign in"),
-                        GestureDetector(
-                          onTap: () {
-                            signIn();
-                            // Sign in action
-                          },
-                          child:const CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Color(0xFF2F3C7E),
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                            ),
-                          ),
+                      const Text(
+                        "Or connect with",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          color: Colors.grey,
+                          height: 1,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(),
-                        ),
-                        const Text('or login with'),
-                        Expanded(
-                          child: Divider(),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20,),
-                    Row(
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  Consumer<LoginProvider>(
+                    builder: (context, value, child) => Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        buildIcon(            
-                          imageUrl:
-                              'https://cdn.iconscout.com/icon/free/png-256/free-google-1772223-1507807.png',
+                        SquareButton(
+                          imagePath: 'assets/google.json',
+                          onTap: () => value.signInWithGoogle(),
                         ),
-                        const SizedBox(width: 20),
-                        buildIcons(
-                          imageUrl:
-                              'https://cdn-icons-png.freepik.com/256/100/100313.png',
+                        const SizedBox(
+                          width: 5,
                         ),
+                        SquareButton(
+                            imagePath: 'assets/github.json',
+                            onTap: value.signInWithGithub),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        SquareButton(
+                            imagePath: 'assets/phone.json',
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>  PhoneAuth()));
+                            })
                       ],
                     ),
-                    SizedBox(height: 18,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-          
-                        Text('dont have an accont  :'),
-                    // SizedBox(width: 10,),
-                    
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: textPoppins(data: "Register here?",color: Colors.blue,))
-                  ],
-              )] ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      )),
     );
   }
 }

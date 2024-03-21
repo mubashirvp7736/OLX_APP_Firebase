@@ -1,29 +1,32 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase2/controller/authentication_provider.dart';
+import 'package:firebase2/widget/drawer.dart';
 import 'package:flutter/material.dart';
-import"package:firebase_auth/firebase_auth.dart";
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 class HomeScreen extends StatelessWidget {
 
  HomeScreen({super.key});
-  final user=FirebaseAuth.instance.currentUser!;
-  void signUserOut(){
-    FirebaseAuth.instance.signOut();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
+    final homeProvider=Provider.of<LoginProvider>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: ()async{
-              await GoogleSignIn().signOut();
-            signUserOut();
-            }, icon: Icon(Icons.logout))
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: (){
+            
+        //    homeProvider.Googl;
+        //     }, icon:const Icon(Icons.logout))
+        // ],
+      
       ),
-       body: Center(
-        child: Text('Logged in'+user.email!,style: TextStyle(fontSize: 20),),
+        drawer: MyDrawer(
+          
+          onSignOut:homeProvider .signOut,
+        ),
+      
+       body:const Center(
+        child: Text('Logged in',style: TextStyle(fontSize: 20),),
        ),
     );
   }

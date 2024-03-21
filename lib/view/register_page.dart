@@ -1,162 +1,91 @@
-
-import 'package:firebase2/view/login_page.dart';
-import 'package:firebase2/widget/textstyle_widget.dart';
+// ignore_for_file: use_build_context_synchronously
+import 'package:firebase2/controller/reg_provider.dart';
+import 'package:firebase2/widget/button.dart';
+import 'package:firebase2/widget/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-class RegisterPage extends StatefulWidget {
-  final  Function()? onTap;
- const RegisterPage({super.key,required this.onTap});
+import 'package:provider/provider.dart';
 
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-
-void signUserUp()async{
-
-  showDialog(context: context, builder: (context) =>const Center(
-    child: SnackBar(content: Text('Successfully add')),
-  ),);
- 
-  try{
-   FirebaseAuth.instance.createUserWithEmailAndPassword(
-    email: emailController.text, 
-    password: passwordController.text);
-    Navigator.pop(context);
-  }on FirebaseAuthException catch (e){
-    Navigator.pop(context);
-    if(e.code=="user-not-found"){
-      wrongEmailMessage(context);
-    }else if(e.code=="wrong password"){
-       wrongPasswordMessage(context);
-    }
-
-  }
-  }
-  void wrongEmailMessage(BuildContext  context){
-  
-    const snackbar= SnackBar(
-          content: Text('failed email')
-        ,duration: Duration(seconds: 3),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  }
-
-  void wrongPasswordMessage(BuildContext context){
-   
-    const snackBar= SnackBar(
-          content: Text('failed Password')
-        ,duration: Duration(seconds: 3),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+class RegisterScreen extends StatelessWidget {
+  final Function()? onTap;
+  const RegisterScreen({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: textPoppins(data: 'Create Account'),
-          centerTitle: true,
-          leading: IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(onTap: (){}),));
-          },  icon: Icon( Icons.arrow_back_ios_new)),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildEmailField(),
-              const SizedBox(height: 20),
-              _buildPasswordField(),
-              const SizedBox(height: 20),
-              _buildRegisterButton(context),
-              SizedBox(height: 25,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Scaffold(
+      body: SafeArea(
+          child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: SingleChildScrollView(
+            child: Consumer<RegisterProvider>(
+              builder: (context, value, child) => Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Already have account :"),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(onTap: () {  },),));
-                    },
-                    child: textPoppins(data: "Login now",color: Colors.blue))
-            
-                ],
-              )
-            ],
-                    
+                  const SizedBox(height: 40),
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      // child: Lottie.asset('assets/reg.json'),
                     ),
-          ),
-      ),
-       )   );
-  }
-
-  Widget _buildEmailField() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              labelText: "Email",
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        // Text(
-        //   '@gmail.com',
-        //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        // ),
-      ],
-    );
-  }
-
-  Widget _buildPasswordField() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: InputDecoration(
-              labelText: "Password",
-              suffixIcon: IconButton(
-                icon: Icon(Icons.visibility_off),
-                onPressed: () {
-                  // Toggle password visibility
-                },
+                  ),
+                  const SizedBox(height: 40),
+                  const Text(
+                    'Create an account',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 20),
+                  MyTextField(
+                    controller: value.emailController,
+                    hintText: 'Enter the email',
+                    obscureText: false,
+                  ),
+                  const SizedBox(height: 20),
+                  MyTextField(
+                      controller: value.passwordController,
+                      hintText: 'Enter the password here',
+                      obscureText: true),
+                  const SizedBox(height: 20),
+                  MyTextField(
+                      controller: value.confirmPassController,
+                      hintText: 'Enter the confirm password here',
+                      obscureText: true),
+                  const SizedBox(height: 20),
+                  MyButton(
+                    text: 'Sign Up',
+                    onTap: () => value.signUp(context),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'already have an account? ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          onTap;
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildRegisterButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        
-        onPressed: () {
-          
-          signUserUp();
-          // Handle registration logic
-        },
-        child: textPoppins(data: "Register",color: Colors.black),
-      ),
+      )),
     );
   }
 }

@@ -1,30 +1,62 @@
+import 'dart:developer';
+
+import 'package:firebase2/view/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+class OtpScreen extends StatelessWidget {
+  final String verificationId;
+  OtpScreen({super.key, required this.verificationId});
 
-  @override
-  State<OtpScreen> createState() => _OtpScreenState();
-}
+  final otpController = TextEditingController();
 
-class _OtpScreenState extends State<OtpScreen> {
-  TextEditingController otpController=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('OTP Screen'),
-        centerTitle: true,
-      ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextField(
-            controller: otpController,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              hintText: 'enter the otp',
-              suffixIcon: Icon(Icons.phone),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(25))
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: TextField(
+              controller: otpController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                  hintText: 'Enter otp ',
+                  suffixIcon: const Icon(Icons.phone),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  )),
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (otpController.text.isNotEmpty) {
+                try {
+                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                      verificationId: verificationId,
+                      smsCode: otpController.text.toString());
+                  FirebaseAuth.instance
+                      .signInWithCredential(credential)
+                      .then((value) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  HomeScreen()));
+                  });
+                } catch (ex) {
+                  log(ex.toString());
+                }
+              } else {
+                log('otp is empty');
+              }
+            },
+            child: const Text(
+              'otp',
+              style: TextStyle(color: Colors.grey),
             ),
           )
         ],
