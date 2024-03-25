@@ -1,7 +1,7 @@
 import 'package:firebase2/controller/authentication_provider.dart';
 import 'package:firebase2/controller/reg_provider.dart';
 import 'package:firebase2/firebase_options.dart';
-import 'package:firebase2/view/auth_page.dart';
+import 'package:firebase2/view/authentication_screen/auth_page.dart';
 // import 'package:firebase2/view/login_page.dart';
 // import 'package:firebase2/view/welcome_page.dart';
 import 'package:firebase_core/firebase_core.dart';

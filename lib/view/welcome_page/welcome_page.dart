@@ -1,4 +1,4 @@
-import 'package:firebase2/view/login_page.dart';
+import 'package:firebase2/view/authentication_screen/login_page.dart';
 import 'package:firebase2/widget/textstyle_widget.dart';
 import 'package:flutter/material.dart';
 class WelcomeScreen extends StatelessWidget {

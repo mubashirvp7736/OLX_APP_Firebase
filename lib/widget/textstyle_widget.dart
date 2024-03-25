@@ -1,5 +1,5 @@
 import 'package:firebase2/controller/authentication_provider.dart';
-import 'package:firebase2/view/phone_auth.dart';
+import 'package:firebase2/view/authentication_screen/phone_auth.dart';
 import 'package:flutter/material.dart';
 import'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

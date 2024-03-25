@@ -1,8 +1,7 @@
 
 import 'package:firebase2/controller/authentication_provider.dart';
-import 'package:firebase2/view/otp_screen.dart';
-import 'package:firebase2/view/phone_auth.dart';
-import 'package:firebase2/view/register_page.dart';
+import 'package:firebase2/view/authentication_screen/phone_auth.dart';
+import 'package:firebase2/view/authentication_screen/register_page.dart';
 import 'package:firebase2/widget/button.dart';
 import 'package:firebase2/widget/square_button.dart';
 import 'package:firebase2/widget/text_field.dart';

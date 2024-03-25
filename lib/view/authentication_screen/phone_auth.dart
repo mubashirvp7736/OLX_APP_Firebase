@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 
-import 'package:firebase2/view/otp_screen.dart';
+import 'package:firebase2/view/authentication_screen/otp_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
