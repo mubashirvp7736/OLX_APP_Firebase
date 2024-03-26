@@ -98,17 +98,21 @@
 
 
    import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase2/model/product_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 class DatabaseService {
   String collection = 'products';
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   late CollectionReference<ProductModel> collectionReference;
   Reference storage = FirebaseStorage.instance.ref();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+   final ImagePicker imagePicker = ImagePicker();
+
 
   DatabaseService() {
     collectionReference =
@@ -132,9 +136,11 @@ class DatabaseService {
 
    }
    Future<List<ProductModel>>getAllProduct()async{
-    final snapshot=
-    await collectionReference.orderBy("timeStamp",descending: true).get();
-    return snapshot.docs.map((doc) =>doc.data() ).toList();
+    // final snapshot=
+    // await collectionReference.orderBy("timeStamp",descending: true).get();
+    // return snapshot.docs.map((doc) =>doc.data() ).toL=ist();
+    final snapshot= await collectionReference.get();
+    return snapshot.docs.map((doc)=>doc.data()).toList();
    }
     IsSold(String id) async {
     await collectionReference.doc(id).update({'isSold': true});
@@ -162,15 +168,15 @@ class DatabaseService {
     }
   }
 
-  Future<String> uploadImage(imageName, imageFile) async {
-    Reference imageFolder = storage.child('productImage');
-    Reference? uploadImage = imageFolder.child('$imageName.jpg');
+  // Future<String> uploadImage(imageName, imageFile) async {
+  //   Reference imageFolder = storage.child('productImage');
+  //   Reference? uploadImage = imageFolder.child('$imageName.jpg');
 
-    await uploadImage.putFile(imageFile);
-    String downloadURL = await uploadImage.getDownloadURL();
-    log('Image successfully uploaded to Firebase Storage.');
-    return downloadURL;
-  }
+  //   await uploadImage.putFile(imageFile);
+  //   String downloadURL = await uploadImage.getDownloadURL();
+  //   log('Image successfully uploaded to Firebase Storage.');
+  //   return downloadURL;
+  // }
 
   updateMyProudct(productId, ProductModel data) async {
     try {
@@ -188,6 +194,24 @@ class DatabaseService {
     } catch (e) {
       log('Product is not deleted: $e');
     }
+  }
+
+  Future<String> uploadImage(imageName, imageFile) async {
+    Reference imageFolder = storage.child('productImage');
+    Reference? uploadImage = imageFolder.child('$imageName.jpg');
+
+    await uploadImage.putFile(imageFile);
+    String downloadURL = await uploadImage.getDownloadURL();
+    log('Image successfully uploaded to Firebase Storage.');
+    return downloadURL;
+  }
+
+  Future<File?> pickImage(ImageSource source) async {
+    final pickedFile = await imagePicker.pickImage(source: source);
+    if (pickedFile != null) {
+      return File(pickedFile.path);
+    }
+    return null;
   }
 }
    

@@ -67,6 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '189546112079',
     projectId: 'olxapp-f50a9',
     storageBucket: 'olxapp-f50a9.appspot.com',
+    androidClientId: '189546112079-uu85on6qn2ev9ga9gnhhs0j6os09opa0.apps.googleusercontent.com',
+    iosClientId: '189546112079-ob1q0c0c4cven773of6vc5rmfrcr7cjr.apps.googleusercontent.com',
     iosBundleId: 'com.example.firebase2',
   );
 
@@ -76,6 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '189546112079',
     projectId: 'olxapp-f50a9',
     storageBucket: 'olxapp-f50a9.appspot.com',
+    androidClientId: '189546112079-uu85on6qn2ev9ga9gnhhs0j6os09opa0.apps.googleusercontent.com',
+    iosClientId: '189546112079-81vkomtto00t7eliq338idf3o1u226au.apps.googleusercontent.com',
     iosBundleId: 'com.example.firebase2.RunnerTests',
   );
 }

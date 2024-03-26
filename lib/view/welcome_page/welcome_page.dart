@@ -18,7 +18,7 @@ class WelcomeScreen extends StatelessWidget {
             child: ElevatedButton(
               onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(onTap: () {  },) ,));
-            }, child: textPoppins(data: "Go to Login ->",),),
+            }, child: textPoppins(name:  "Go to Login ->",),),
           )
         ]
       )

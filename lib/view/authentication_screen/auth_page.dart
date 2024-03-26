@@ -1,5 +1,3 @@
-
-
 import 'package:firebase2/view/bottombar.dart';
 import 'package:firebase2/view/authentication_screen/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';

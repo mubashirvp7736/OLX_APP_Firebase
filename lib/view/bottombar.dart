@@ -17,7 +17,7 @@ class BottomPage extends StatefulWidget {
 class _BottomPageState extends State<BottomPage> {
   int selectIndex=0;
   List screens=const[
-    HomeProduct(),
+     HomeProduct(),
     WishList(),
     AddProduction(),
     SettingScreen()
@@ -34,9 +34,7 @@ class _BottomPageState extends State<BottomPage> {
   Widget build(BuildContext context) {
     final homeProvider=Provider.of<LoginProvider>(context,listen: false);
     return Scaffold(
-      appBar: AppBar(
-        title:const Text('home'),
-      ),
+         
         drawer: MyDrawer(
           
           onSignOut:homeProvider .signOut,

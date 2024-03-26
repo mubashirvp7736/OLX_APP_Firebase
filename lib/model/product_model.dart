@@ -1,46 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductModel {
-  String? userName;
-  String? id;
-  String? uId;
+  // String? userName;
+   String? id;
+ // String? uId;
   String? title;
-  String? brand;
+  //String? brand;
+  String? place;
   String? description;
   String? category;
+//  String? date;
   bool? isSold;
   List<String>? wishList;
-  DateTime? timeStamp;
-  String? location;
+//  DateTime? timeStamp;
+ // String? location;
   String? image;
-  int? price;
+  String? price;
   ProductModel(
       {this.category,
-      this.userName,
+    //  this.userName,
       this.id,
-      this.uId,
-      this.location,
+      this.place,
+    //  this.uId,
+      //this.location,
       this.isSold,
       this.image,
       this.price,
       this.description,
-      this.brand,
-      this.timeStamp,
+      //this.brand,
+      //this.timeStamp,
       this.title,
       this.wishList});
   factory ProductModel.fromJson(String id, Map<String, dynamic> json) {
     return ProductModel(
-      userName: json['userName'],
-      uId: json['uId'],
+     // userName: json['userName'],
+     // uId: json['uId'],
       id: id,
-      location: json['location'],
-      timeStamp: json['timeStamp'] != null
-          ? (json['timeStamp'] as Timestamp).toDate()
-          : null,
+      //location: json['location'],
+      //timeStamp: json['timeStamp'] != null
+        //  : null,
       category: json['category'],
       image: json['image'],
       price: json['price'],
-      brand: json['brand'],
+     // brand: json['brand'],
+      place: json["place"],
       isSold: json['isSold'],
       description: json['description'],
       title: json['title'],
@@ -51,18 +54,19 @@ class ProductModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'uId': uId,
+      //'uId': uId,
       'category': category,
-      'userName': userName,
-      'location': location,
+     // 'userName': userName,
+      //'location': location,
       'image': image,
       'price': price,
       'isSold': isSold,
-      'brand': brand,
+     // 'brand': brand,
       'description': description,
-      'timeStamp': timeStamp,
+      //'timeStamp': timeStamp,
       'title': title,
       'wishList': wishList,
+      "place":place
     };
   }
 }

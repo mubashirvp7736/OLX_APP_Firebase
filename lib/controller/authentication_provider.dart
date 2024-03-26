@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:firebase2/service/auth_service.dart';
 import 'package:firebase2/view/authentication_screen/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class LoginProvider extends ChangeNotifier {
   final TextEditingController otpController = TextEditingController();
   bool showingLoginPage=true;
   //user signed in
+  DatabaseService database=DatabaseService();
   void signIn(context) async {
     //loading circle
     showDialog(
@@ -48,6 +50,10 @@ class LoginProvider extends ChangeNotifier {
       ),
     );
     notifyListeners();
+  }
+  
+  void googleSignOut()async{
+   await GoogleSignIn().signOut();
   }
 
   Future<UserCredential> signInWithGithub() async {
