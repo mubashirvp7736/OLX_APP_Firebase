@@ -45,7 +45,7 @@ class OtpScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>  BottomPage()));
+                            builder: (context) =>  BottomScreen()));
                   });
                 } catch (ex) {
                   log(ex.toString());

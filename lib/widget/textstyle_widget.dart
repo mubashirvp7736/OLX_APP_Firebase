@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 import'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-// Widget textPoppins({data,color,}){
-//   return Text(data,
-//   style: GoogleFonts.poppins(
-//     color: color,fontWeight: FontWeight.w800,fontSize: 20));
-   
-// }
-Widget textPoppins({name, color, fontweight, double? fontsize}) {
+
+Widget textPoppins({name, color, fontweight, double? fontsize, }) {
   return Text(name,
       style: GoogleFonts.poppins(
           color: color, fontWeight: fontweight, fontSize: fontsize));

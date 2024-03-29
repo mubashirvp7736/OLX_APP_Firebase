@@ -1,72 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductModel {
-  // String? userName;
-   String? id;
- // String? uId;
+  String? id;
   String? title;
-  //String? brand;
   String? place;
   String? description;
   String? category;
-//  String? date;
-  bool? isSold;
-  List<String>? wishList;
-//  DateTime? timeStamp;
- // String? location;
   String? image;
   String? price;
-  ProductModel(
-      {this.category,
-    //  this.userName,
-      this.id,
-      this.place,
-    //  this.uId,
-      //this.location,
-      this.isSold,
-      this.image,
-      this.price,
-      this.description,
-      //this.brand,
-      //this.timeStamp,
-      this.title,
-      this.wishList});
+  List<String> wishList;
+
+  ProductModel({
+    this.id,
+    this.title,
+    this.place,
+    this.image,
+    this.price,
+    this.description,
+    this.category,
+    required this.wishList,
+  });
+
   factory ProductModel.fromJson(String id, Map<String, dynamic> json) {
     return ProductModel(
-     // userName: json['userName'],
-     // uId: json['uId'],
       id: id,
-      //location: json['location'],
-      //timeStamp: json['timeStamp'] != null
-        //  : null,
       category: json['category'],
       image: json['image'],
       price: json['price'],
-     // brand: json['brand'],
       place: json["place"],
-      isSold: json['isSold'],
       description: json['description'],
       title: json['title'],
-      wishList: List<String>.from(json["wishList"] ?? []),
+      wishList: List<String>.from(json['wishList'] ?? []),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      //'uId': uId,
       'category': category,
-     // 'userName': userName,
-      //'location': location,
       'image': image,
       'price': price,
-      'isSold': isSold,
-     // 'brand': brand,
       'description': description,
-      //'timeStamp': timeStamp,
       'title': title,
       'wishList': wishList,
-      "place":place
+      "place": place,
     };
   }
 }

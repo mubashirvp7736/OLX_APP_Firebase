@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase2/model/product_model.dart';
 import 'package:firebase2/service/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -12,6 +13,8 @@ class ProductProvid extends ChangeNotifier{
   TextEditingController descriptionController = TextEditingController();
   String? selectedItem;
   final List<String> listProducts = ["cycle", "Bike", "car", "books", "scooter", "mobile", "charger", "laptop", "dress"];
+   ProductService databaseService=ProductService();
+  int selectIndex=0;
 
    File? pickedImage;
     String imageName = DateTime.now().microsecondsSinceEpoch.toString();
@@ -24,13 +27,38 @@ class ProductProvid extends ChangeNotifier{
    final ImagePicker imagePicker = ImagePicker();
     bool isDataAdd=false;
 
-  final DatabaseService databaseService=DatabaseService();
- Future<void> getAllProducts() async {
-    isLoading=true;
-    allProduct = await databaseService.getAllProduct();
-    isLoading=false;
+//  void getAllProducts() async {
+//     isLoading=true;
+//     allProduct = await databaseService.getAllProduct();
+//     //notifyListeners();
+//     isLoading=false;
+//     notifyListeners();
+//     log("message");
+//   }
+  int currentIndex = 0;
+
+  void onTap(int index) {
+    currentIndex = index;
     notifyListeners();
   }
+    void getAllproduct() async {
+    isLoading = true;
+    notifyListeners();
+    allProduct = await databaseService.getAllProducts();
+
+    isLoading = false;
+
+    notifyListeners();
+  }
+
+  // Future<void> getAllProducts() async {
+  //   isLoading = true;
+  //   notifyListeners();
+
+  //    await databaseService.getAllProducts();
+  //   isLoading = false;
+  //   notifyListeners();
+  // }
 // my product functions
  void isDtaAdd(bool value){
   isDataAdd=value;
@@ -39,10 +67,10 @@ class ProductProvid extends ChangeNotifier{
   Future<void> deleteMyProduct(productId) async {
     await databaseService.deleteMyProduct(productId);
     notifyListeners();
-    getAllProducts();
+    getAllproduct();
     
   }
-   DatabaseService dataBaseService= DatabaseService();
+   ProductService dataBaseService= ProductService();
        
        
   addcategory (String? value) {
@@ -53,9 +81,10 @@ class ProductProvid extends ChangeNotifier{
   Future<void> addProduct(ProductModel data) async {
     try {
       await dataBaseService.addProduct(data);
-      log('controller add working');
       notifyListeners();
-      getAllProducts();
+     clearControllers();
+
+    getAllproduct();
     } catch (e) {
       print('Error adding product: $e');
       log('controller add not working');
@@ -64,7 +93,6 @@ class ProductProvid extends ChangeNotifier{
 
   // addProduct(ProductModel data) async {
   //   await databaseService.addProduct(data);
-  //   clearControllers();
   //   getAllProducts();
   //   notifyListeners();
   // }
@@ -76,10 +104,17 @@ class ProductProvid extends ChangeNotifier{
   }
 
   idSold(String id) async {
-    await databaseService.IsSold(id);
-    getAllProducts();
+    await databaseService.isSold(id);
+    getAllproduct();
   }
+  // selectedBottomBar(int index){
+   
+  //         selectIndex=index;
+  //         notifyListeners();
 
+  //   }
+
+   
   // serach function
   searchFilter(String value) {
     searchedList = allProduct
@@ -108,11 +143,12 @@ class ProductProvid extends ChangeNotifier{
   }
 
   clearControllers() {
-    // titleController.clear();
-    // brandController.clear();
-    // priceController.clear();
-    // locationController.clear();
-    // descriptionController.clear();
+    titleController.clear();
+    pickedImage=null;
+    selectedItem=null;
+    priceController.clear();
+    locationController.clear();
+    descriptionController.clear();
     notifyListeners();
   }
 
@@ -127,4 +163,25 @@ class ProductProvid extends ChangeNotifier{
       notifyListeners();
     }
   }
+   Future<void> wishlistClicked(String id, bool status) async {
+    await dataBaseService.wishListClicked(id, status);
+    notifyListeners();
+  }
+
+  bool wishListCheck(ProductModel product,) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final user = currentUser.email ?? currentUser.phoneNumber;
+      if (product.wishList.contains(user)) {
+    getAllproduct();
+        return false;
+      } else {
+    getAllproduct();
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+  
 }

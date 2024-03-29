@@ -166,11 +166,13 @@
 //   // }
 
 // }
+import 'package:firebase2/controller/authentication_provider.dart';
 import 'package:firebase2/controller/product_provider.dart';
 import 'package:firebase2/model/product_model.dart';
 import 'package:firebase2/widget/textstyle_widget.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 
 class HomeProductContainer extends StatelessWidget {
@@ -187,7 +189,7 @@ class HomeProductContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-     
+    //  final value=Provider.of<ProductProvid>(context);
     // final authProvider =
     //     Provider.of<AuthProvider>(context, listen: false);
     // final carProvider = Provider.of<ProductProvid>(context, listen: false);
@@ -221,7 +223,7 @@ class HomeProductContainer extends StatelessWidget {
                 name: product.title, 
                 color: Colors.white,
                 fontweight: FontWeight.bold, fontsize: 16),
-                SizedBox(height: 13,),
+                SizedBox(height: 4,),
                 textPoppins(
                 name: product.place, 
                 color: Colors.white,
@@ -231,23 +233,23 @@ class HomeProductContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               
               children: [
-                // Text(
-                //   '₹ ${product.price.toString()} ',
-                //   style: const TextStyle(
-                //     fontWeight: FontWeight.bold,
-                //     fontSize: 14,
-                //   ),
-                // ),
-             
+              
                      IconButton(
                         onPressed: () {
                          
-                        },
-                        icon:  const Icon(
-                                Icons.favorite_border_outlined,
-                                color: Colors.white,
-                              ),
-                      )
+                       final wish = value.wishListCheck(product);
+                        value.wishlistClicked(product.id!, wish);
+                      },
+                      icon: value.wishListCheck(product)
+                          ? const Icon(
+                              Icons.favorite_border_outlined,
+                              color: Colors.red,
+                            )
+                          : const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                            ),
+                    )
               ],
             )
           ],
